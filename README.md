@@ -23,7 +23,10 @@ module.exports = {
     output: {
         path: __dirname,
         filename: "app.js"
-    }
+    },
+    resolve: {
+        extensions: ["",".js",".json",".oj"],
+    },
     module: {
         loaders: [
             { test: /\.oj$/, loader: "oj" }
@@ -33,6 +36,8 @@ module.exports = {
 ```
 
 Usually, you'd supply something like `myapp.js` into the `entry` section of the configuration. But if you have the OJ loader installed, you can **also** use a `.oj` file as an entry!
+
+It's important to note, that you should add an entry to `resolve.extensions` to resolve files with the `.oj` extension.
 
 
 ### Your first OJ script (`bard.oj`)
@@ -48,7 +53,7 @@ Now we have a very tiny and basic class. In order to use it, we do it like this:
 
 ### Entry (`main.oj`)
 ```objective-c
-require("bard.oj"); // Looking familiar?
+require("./bard.oj"); // Looking familiar?
 
 // In order to use the Bard class, we have to tell the compiler about it:
 @class Bard;
