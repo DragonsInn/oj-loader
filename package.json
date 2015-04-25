@@ -1,0 +1,35 @@
+{
+  "name": "oj-loader",
+  "version": "0.1.0",
+  "description": "Load OJ files into your WebPack bundle! Write your app like you haven't done before.",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/IngwiePhoenix/oj-loader"
+  },
+  "keywords": [
+    "oj",
+    "objective-j",
+    "objective-oj",
+    "objective-c",
+    "webpack",
+    "compiler",
+    "compile"
+  ],
+  "author": "Ingwie Phoenix <ingwie2000@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/IngwiePhoenix/oj-loader/issues"
+  },
+  "homepage": "https://github.com/IngwiePhoenix/oj-loader",
+  "dependencies": {
+    "loader-utils": "^0.2.7",
+    "ojc": "^1.1.2"
+  }
+}

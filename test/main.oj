@@ -1,0 +1,7 @@
+@implementation App {}
++(void)run {
+    alert("Hello, world!");
+}
+@end
+
+[App run];
