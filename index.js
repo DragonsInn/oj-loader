@@ -63,11 +63,15 @@ module.exports = function OJ(source,map) {
             options.squeeze = true;
         }
 
-        // Turn warnings on by default. Be like -Wall... :)
-        options["warn-unused-ivars"]=true;
-        options["warn-unknown-ivars"]=true;
-        options["warn-unknown-selectors"]=true;
-        options["warn-this-in-methods"]=true;
+        // Compiler options
+        [
+            "warn-unused-ivars",
+            "warn-unknown-ivars",
+            "warn-unknown-selectors",
+            "warn-this-in-methods"
+        ].forEach(function(k,v){
+            options[v] = options[v] || true;
+        });
 
         // Do it.
         var _this = this;

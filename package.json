@@ -1,6 +1,6 @@
 {
   "name": "oj-loader",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Load OJ files into your WebPack bundle! Write your app like you haven't done before.",
   "main": "index.js",
   "directories": {
