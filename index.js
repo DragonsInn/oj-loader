@@ -2,6 +2,34 @@ var ojc = require("ojc").compile;
 var lu = require("loader-utils");
 var path = require("path");
 
+// Copied and modified from ojc/bin/ojc
+function print_error(err) {
+    function toString(e) {
+        var result  = "";
+
+        var file   = e.file   || e.filename;
+        var line   = e.line   || e.lineNumber;
+        var column = e.column || e.columnNumber || e.col;
+        var reason = e.reason || e.description;
+
+        if (file)   result += file;
+        if (line)   result += ":" + line;
+        if (column) result += ":" + column;
+        if (reason) result += " " + reason;
+
+        return result;
+    }
+
+    var strings;
+    if (typeof err == "array") {
+        strings = err.map(function(e) { return toString(e) });
+    } else {
+        strings = [ toString(err) ];
+    }
+
+    this.emitError(strings.join("\n"));
+}
+
 // Compiler
 module.exports = function OJ(source,map) {
     // Compilation-specific caching
@@ -77,7 +105,8 @@ module.exports = function OJ(source,map) {
         var _this = this;
         ojc(options, function(err, result){
             if(err) {
-                cb(err);
+                print_error.call(_this, err);
+                cb(new Error("Compilation failed!"));
             } else {
                 for(var i in result.warnings) {
                     var warning = result.warnings[i];
