@@ -144,3 +144,5 @@ module.exports = function OJ(source,map) {
         this._compilation.ojc = ojcData;
     }
 };
+
+module.exports.juicy = juicy;
