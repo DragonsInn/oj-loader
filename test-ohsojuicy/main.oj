@@ -1,0 +1,8 @@
+#include "Log.oj"
+@implementation App {}
++(void)run {
+    [Log info:"Hello from " + APP + "!"];
+}
+@end
+
+[App run];

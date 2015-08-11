@@ -1,6 +1,7 @@
-var ojc = require("ojc").compile;
+var juicy = require("ohsojuicy");
 var lu = require("loader-utils");
 var path = require("path");
+var merge = require("merge");
 
 // Copied and modified from ojc/bin/ojc
 function print_error(err) {
@@ -32,12 +33,25 @@ function print_error(err) {
 
 // Compiler
 module.exports = function OJ(source,map) {
-    // Compilation-specific caching
+    // Compilation-specific caching and state keeping
     if(typeof this._compilation.ojc == "undefined") {
         this._compilation.ojc = {
             cache: {},
             state: {}
         };
+        // This is a new compilation, so also add the middlewares.
+        if(typeof this.options.oj == "object") {
+            var ojo = this.options.oj;
+            var keys = ["pre","post"];
+            for(var n in keys) {
+                var k = keys[n];
+                if(typeof ojo[k] != "undefined") {
+                    for(var i in ojo[k]) {
+                        juicy.use(k+"-compile", ojo[k][i]);
+                    }
+                }
+            }
+        }
     }
 
     var ojcData = this._compilation.ojc;
@@ -45,7 +59,7 @@ module.exports = function OJ(source,map) {
     // Header
     var header = [
         // Import the runtime
-        "var oj = require('!!ojc/src/runtime')",
+        "var oj = require('!!"+require.resolve("ojc/src/runtime")+"')",
     ].join("\n");
 
     // OJ is cool like this.
@@ -67,6 +81,11 @@ module.exports = function OJ(source,map) {
     } else {
         // The query should be - almost! - the OJ options
         var options = lu.parseQuery(this.query);
+
+        // this might be present so use it.
+        if(typeof this.options.oj == "object" && typeof this.options.oj.options == "object") {
+            options = merge(options, this.options.oj.options);
+        }
 
         // Compiler state. Use previous one if possible
         // `this` keeps changing, so I need another way...
@@ -103,7 +122,7 @@ module.exports = function OJ(source,map) {
 
         // Do it.
         var _this = this;
-        ojc(options, function(err, result){
+        juicy.compile(options, function(err, result){
             if(err) {
                 print_error.call(_this, err);
                 cb(new Error("Compilation failed!"));

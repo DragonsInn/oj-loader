@@ -1,0 +1,5 @@
+@implementation Log
++(void)info:(String)msg {
+    console.log(msg);
+}
+@end
