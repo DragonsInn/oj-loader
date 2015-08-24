@@ -33,6 +33,10 @@ function print_error(err) {
 
 // Compiler
 module.exports = function OJ(source,map) {
+    // OJ is cool like this.
+    this.cacheable(true);
+    var options = lu.parseQuery(this.query);
+
     // Compilation-specific caching and state keeping
     if(typeof this._compilation.ojc == "undefined") {
         this._compilation.ojc = {
@@ -56,14 +60,13 @@ module.exports = function OJ(source,map) {
 
     var ojcData = this._compilation.ojc;
 
-    // Header
+    // Write the statement to obtain the OJ runtime.
+    // Note: Statement starts with !! to prevent unwanted side effects.
+    var rtPath = this.options.oj.runtime || options.runtime || require.resolve("ojc/src/runtime");
     var header = [
         // Import the runtime
-        "var oj = require('!!"+require.resolve("ojc/src/runtime")+"')",
+        "var oj = require('!!"+rtPath+"')",
     ].join("\n");
-
-    // OJ is cool like this.
-    this.cacheable(true);
 
     // We must be able to be sync.
     var cb = this.async();
@@ -80,7 +83,6 @@ module.exports = function OJ(source,map) {
         cb(null, out.code, out.map);
     } else {
         // The query should be - almost! - the OJ options
-        var options = lu.parseQuery(this.query);
 
         // this might be present so use it.
         if(typeof this.options.oj == "object" && typeof this.options.oj.options == "object") {
