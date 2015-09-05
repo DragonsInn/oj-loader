@@ -100,6 +100,12 @@ module.exports = function OJ(source,map) {
             path: rawFile,
             contents: source
         }];
+        if(typeof options.preprocessor == "undefined") {
+            options.preprocessor = {};
+        }
+        options.preprocessor.onInclude = function(file) {
+            this.addDependency(file);
+        }.bind(this);
 
         // SourceMap?
         if(this.sourceMap) {
